@@ -21,15 +21,15 @@ spring:
           predicates:
             - Path=/api/bills/**
 
-
 server:
   port: 8080
 
 eureka:
   client:
     serviceUrl:
-      defaultZone: http://localhost:8761/eureka/
-
+      defaultZone: https://discovery-service-production-ec0a.up.railway.app//eureka/
+  instance:
+    prefer-ip-address: true
 
 #  instance:
 #    hostname: localhost
