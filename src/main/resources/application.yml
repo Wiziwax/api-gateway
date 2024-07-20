@@ -3,21 +3,17 @@ spring:
     name: api-gateway
   cloud:
     gateway:
+      discovery:
+        locator:
+          enabled: true
+          lower-case-service-id: true
       routes:
-        - id: onboarding-service-accounts
-          uri: lb://onboarding-service
+        - id: onboarding-service
+          uri: ${ONBOARDING_SERVICE_URL:http://localhost:8085}
           predicates:
-            - Path=/api/accounts/**
-        - id: onboarding-service-onboarding-register
-          uri: lb://onboarding-service
-          predicates:
-            - Path=/api/onboarding/**
-        - id: onboarding-service-customer
-          uri: lb://onboarding-service
-          predicates:
-            - Path=/api/customer/**
-        - id: bills-payment-bills
-          uri: lb://bills-service
+            - Path=/api/accounts/**, /api/onboarding/**, /api/customer/**
+        - id: bills-service
+          uri: ${BILLS_SERVICE_URL:http://localhost:8200}
           predicates:
             - Path=/api/bills/**
 
@@ -27,9 +23,15 @@ server:
 eureka:
   client:
     serviceUrl:
-      defaultZone: https://discovery-service-production-ec0a.up.railway.app//eureka/
+      defaultZone: ${EUREKA_CLIENT_SERVICEURL_DEFAULTZONE:http://localhost:8761/eureka/}
   instance:
     prefer-ip-address: true
+    hostname: ${RAILWAY_STATIC_URL:localhost}
+
+logging:
+  level:
+    org.springframework.cloud.gateway: DEBUG
+    reactor.netty: DEBUG
 
 #  instance:
 #    hostname: localhost
