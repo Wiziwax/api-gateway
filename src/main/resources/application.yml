@@ -3,6 +3,9 @@ spring:
     name: api-gateway
   cloud:
     gateway:
+      discovery:
+        locator:
+          enabled: false
       routes:
         - id: onboarding-service
           uri: ${ONBOARDING_SERVICE_URL}
